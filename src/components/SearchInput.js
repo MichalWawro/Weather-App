@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import './SearchInput.css';
 
-function SearchInput({ apiKey, setCityId }) {
+function SearchInput({ weatherApiKey, setCityId }) {
     const [searchValue, setSearchValue] = useState('');
     const [cityList, setCityList] = useState([]);
 
@@ -23,7 +23,7 @@ function SearchInput({ apiKey, setCityId }) {
     };
 
     function filterCityList(requestValue) {
-        fetch(`http://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${requestValue}`)
+        fetch(`http://api.weatherapi.com/v1/search.json?key=${weatherApiKey}&q=${requestValue}`)
             .then((response) =>
                 response.json())
             .then((data) => {
@@ -54,9 +54,6 @@ function SearchInput({ apiKey, setCityId }) {
                             </li>
                         ))}
                     </ul>
-                )}
-                {cityList.length === 0 && searchValue && (
-                    <li className="no-results">No cities found</li>
                 )}
             </form>
         </div>

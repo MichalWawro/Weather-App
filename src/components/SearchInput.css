@@ -1,31 +1,36 @@
 .input-field {
     position: absolute;
+    width: 25%;
     transform: translate(-50%);
     left: 50%;
-    width: 25%;
     top: 3vh;
+    z-index: 1;
+
     border-radius:20px;
-    border: 0;
+    border: 3px solid black;
     outline: 0;
     padding: 7px 0;
+
     text-align: center;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 1.3rem;
-
-    background-color: #FFDBB5;
+    
+    background-color: white;
     color: black
   }
   
   .dropdown-list {
     position: absolute;
+    width: 25%;
     transform: translate(-50%);
     left: 50%;
-  
     top: 7.5vh;
-    width: 25%;
+    z-index: 1;
+
     padding: 0;
     margin: 0;
+    border: 3px solid black;
     border-radius: 20px;
   
     text-align: center;
@@ -36,7 +41,7 @@
     max-height: 250px;
     overflow-y: auto;
 
-    background-color: #FFDBB5;
+    background-color: white;
     color: black
   }
   
