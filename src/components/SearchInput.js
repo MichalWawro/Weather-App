@@ -3,17 +3,21 @@ import { useState } from "react";
 
 import './SearchInput.css';
 
-function SearchInput({ apiKey, setCity }) {
+function SearchInput({ apiKey, setCityId }) {
     const [searchValue, setSearchValue] = useState('');
     const [cityList, setCityList] = useState([]);
 
     const handleInputChange = (e) => {
+        if(e.target.value.length > 0) {
+            filterCityList(e.target.value);
+        } else {
+            setCityList([]);
+        }
         setSearchValue(e.target.value);
-        filterCityList(e.target.value);
     };
 
-    const handleCitySelect = (cityName, cityCountry) => {
-        setCity({name:cityName, country: cityCountry});
+    const handleCitySelect = (cityId) => {
+        setCityId(cityId);
         setSearchValue('');
         setCityList([]);
     };
@@ -31,7 +35,7 @@ function SearchInput({ apiKey, setCity }) {
     }
 
     return (
-        <div className="search-input">
+        <div className="search-input-container">
             <form className="input-form">
                 <input
                     type="text"
@@ -44,7 +48,7 @@ function SearchInput({ apiKey, setCity }) {
                         {cityList.map((city) => (
                             <li
                                 key={city.id || city.name}
-                                onClick={() => handleCitySelect(city.name, city.country)}
+                                onClick={() => handleCitySelect(city.id)}
                             >
                                 {city.name}, {city.country}
                             </li>

@@ -3,27 +3,44 @@ import './App.css';
 
 // Component imports
 import SearchInput from './components/SearchInput';
+import WeatherInfo from './components/WeatherInfo';
 
 function App() {
   const [apiKey] = useState('API_Key');
-  const [searchedCity, setSearchedCity] = useState({});
-  const [currentCity, setCurrentCity] = useState({ name: "Warsaw", country: "Poland" })
+  const [weatherData, setWeatherData] = useState();
+  const [searchedCityId, setSearchedCityId] = useState();
+  const [previewCityArray] = useState([2618724, 2801268, 136022, 1988803, 803267, 714482, 287907, 1284918, 555772, 3125553, 918425])
+  const [dots, setDots] = useState("");
 
   useEffect(() => {
-    if (searchedCity?.name) {
-      handleCitySelect(searchedCity);
+    fetchWeatherForCity("current", previewCityArray[Math.floor(Math.random() * previewCityArray.length)]);
+
+    const interval = setInterval(() => {
+      setDots((prevDots) => {
+        if (prevDots.length < 3) {
+          return prevDots + ".";
+        } else {
+          return "";
+        }
+      });
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [])
+
+  useEffect(() => {
+    console.log("Searched City ID: ", searchedCityId);
+    if (searchedCityId) {
+      fetchWeatherForCity("current", searchedCityId);
     }
-  }, [searchedCity]);
+  }, [searchedCityId]);
 
-  const handleCitySelect = (searchedCity) => {
-    fetchWeatherForCity("current", searchedCity.name);
-  };
-
-  const fetchWeatherForCity = (method, searchedCity) => {
-    fetch(`http://api.weatherapi.com/v1/${method}.json?key=${apiKey}&q=${searchedCity}&aqi=no`)
+  const fetchWeatherForCity = (method, cityId) => {
+    fetch(`http://api.weatherapi.com/v1/${method}.json?key=${apiKey}&q=id:${cityId}&aqi=no`)
       .then((response) => response.json())
       .then((data) => {
-        setCurrentCity({ name: data.location.name, country: data.location.country });
+        setWeatherData(data);
+        console.log(data);
       })
       .catch(function (error) {
         console.log("Error: ", error);
@@ -31,12 +48,18 @@ function App() {
   };
 
   return (
-    <div className="App-container">
-      <SearchInput apiKey={apiKey} setCity={setSearchedCity} />
-      <button onClick={() => fetchWeatherForCity("current", "London" )}>
-        Get weather for London
-      </button>
-      <h1>{currentCity.name}, {currentCity.country}</h1>
+    <div className="app-container">
+      <SearchInput apiKey={apiKey} setCityId={setSearchedCityId} />
+      {weatherData ? (
+        <div className=''>
+          <WeatherInfo weatherData={weatherData} />
+        </div>
+      ) : (
+        <div>
+          <h1>Fetching Data{dots}</h1>
+        </div>
+      )}
+
     </div>
   );
 }
