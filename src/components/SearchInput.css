@@ -17,6 +17,7 @@
     font-size: 1.3rem;
     
     background-color: white;
+    opacity: 80%;
     color: black
   }
   
@@ -42,6 +43,7 @@
     overflow-y: auto;
 
     background-color: white;
+    opacity: 80%;
     color: black
   }
   

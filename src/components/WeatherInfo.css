@@ -1,22 +1,102 @@
 .weather-container {
     position: absolute;
     width: 50%;
-    height: 50%;
     transform: translate(-50%);
     left: 50%;
     top: 10%;
 
-
     border: 3px solid black;
-    border-radius:20px;
-    padding: 10px;
-    
-    /* text-align: center; */
+    border-radius: 20px;
+    padding: 20px;
+
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 1rem;
 
     background-color: white;
     opacity: 80%;
-    color: black
+    color: black;
+}
+
+.current-location {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.current-temperature {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.row-box {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.current-time {
+    flex: 1;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.current-condition {
+    flex: 1;
+    text-align: right;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.current-condition img {
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.current-wind {
+    flex: 1;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.current-humidity {
+    flex: 1;
+    text-align: right;
+    font-size: 1rem;
+}
+
+.forecast-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.forecast-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-box img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.forecast-box h1 {
+    font-size: 1rem;
+    font-weight: 500;
 }
