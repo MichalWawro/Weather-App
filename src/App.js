@@ -11,7 +11,6 @@ function App() {
   const [weatherApiKey] = useState('Api_Key');
   const [imageApiKey] = useState('Api_Key');
 
-
   const [searchedCityId, setSearchedCityId] = useState();
   const [previewCityArray] = useState([2618724, 2801268, 136022, 1988803, 803267, 714482, 287907, 1284918, 555772, 3125553, 918425])
   const [favoriteCitiesArray, setFavoriteCities] = useState([2618724, 2801268, 136022, 1988803]);
@@ -107,7 +106,7 @@ function App() {
       <SearchInput weatherApiKey={weatherApiKey} setCityId={setSearchedCityId} />  
       {(weatherData && favoritesWeatherData.length == favoriteCitiesArray.length) ? (
         <div className=''>
-          <WeatherInfo weatherData={weatherData} />
+          <WeatherInfo weatherData={weatherData} cityId={searchedCityId} favorites={favoriteCitiesArray} setFavorites={setFavoriteCities} />
           <FavoriteBar weatherApiKey={weatherApiKey} weatherData={favoritesWeatherData} setCityId={setSearchedCityId} />
         </div>
       ) : (

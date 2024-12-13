@@ -1,19 +1,67 @@
+
 .favorite-container {
     position: absolute;
-    width: 80%;
+    width: auto;
     transform: translate(-50%);
     left: 50%;
-    top: 80%;
+    top: 65%;
 
     border: 3px solid black;
     border-radius: 20px;
-    padding: 20px;
+    padding: 10px;
 
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 1rem;
 
     background-color: white;
-    opacity: 80%;
+    opacity: 90%;
     color: black;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.favorite-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.favourite-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    width: 100px;
+    text-align: center;
+
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.favourite-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.favourite-box img {
+    width: 50px;
+    height: 50px;
+    margin: 10px 0;
+}
+
+.favourite-box h1 {
+    font-size: 1rem;
+    margin: 5px 0;
 }

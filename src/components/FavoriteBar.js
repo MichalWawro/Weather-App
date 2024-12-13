@@ -1,6 +1,5 @@
-import { React, useState } from "react";
-
-import './FavoriteBar.css'
+import React from "react";
+import './FavoriteBar.css';
 
 function FavoriteBar({ weatherApiKey, weatherData, setCityId }) {
 
@@ -10,8 +9,7 @@ function FavoriteBar({ weatherApiKey, weatherData, setCityId }) {
 
     function filterCityList(requestValue) {
         fetch(`http://api.weatherapi.com/v1/search.json?key=${weatherApiKey}&q=${requestValue}`)
-            .then((response) =>
-                response.json())
+            .then((response) => response.json())
             .then((data) => {
                 setCityId(data[0].id);
             })
@@ -23,36 +21,25 @@ function FavoriteBar({ weatherApiKey, weatherData, setCityId }) {
     return (
         <div className="favorite-container">
             {weatherData.length > 0 && (
-                <ul className="dropdown-list">
+                <div className="favorite-boxes">
                     {weatherData.map((city) => (
-                        <li
-                            key={city.id || city.name}
+                        <div
+                            key={city.id || city.location.name}
+                            className="favourite-box"
                             onClick={() => handleFavoriteClick(city)}
                         >
-                            {city.location.name}, {city.location.country}
-                        </li>
+                            <h1>{city.location.name}, {city.location.country}</h1>
+                            <img
+                                src={city.current.condition.icon}
+                                alt={city.current.condition.text}
+                            />
+                            <h1>{city.current.temp_c}&deg;C, {city.current.temp_f}&deg;F</h1>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
-            {/* <div className="favourite-box">
-                <h1></h1>
-                <img src={weatherData.current.condition.icon} alt={"codition-image"} />
-                <h1>{weatherData.current.temp_c}C, {weatherData.current.temp_f}F</h1>
-            </div>
-            <div className="favourite-box">
-                <img src={weatherData.current.condition.icon} alt={"codition-image"} />
-                <h1>{weatherData.current.temp_c}C, {weatherData.current.temp_f}F</h1>
-            </div>
-            <div className="forecast-box">
-                <img src={weatherData.current.condition.icon} alt={"codition-image"} />
-                <h1>{weatherData.current.temp_c}C, {weatherData.current.temp_f}F</h1>
-            </div>
-            <div className="forecast-box">
-                <img src={weatherData.current.condition.icon} alt={"codition-image"} />
-                <h1>{weatherData.current.temp_c}C, {weatherData.current.temp_f}F</h1>
-            </div> */}
         </div>
-    )
-};
+    );
+}
 
 export default FavoriteBar;
