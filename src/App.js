@@ -5,115 +5,116 @@ import SearchInput from './components/SearchInput';
 import WeatherInfo from './components/WeatherInfo';
 import FavoriteBar from './components/FavoriteBar';
 
-import cloudsImage from './resources/clouds-image.jpg'
+import cloudsImage from './resources/clouds-image.jpg';
+
+function getUpcomingDays(currentDayIndex) {
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  return Array.from({ length: 4 }, (_, i) => days[(currentDayIndex + i) % 7]);
+}
 
 function App() {
-  const [weatherApiKey] = useState('Api_Key');
-  const [imageApiKey] = useState('Api_Key');
+  const [weatherApiKey] = useState('API_Key');
+  const [imageApiKey] = useState('API_Key');
 
-  const [searchedCityId, setSearchedCityId] = useState();
-  const [previewCityArray] = useState([2618724, 2801268, 136022, 1988803, 803267, 714482, 287907, 1284918, 555772, 3125553, 918425])
+  const [searchedCityId, setSearchedCityId] = useState(null);
+  const [previewCityArray] = useState([2618724, 2801268, 136022, 1988803, 803267, 714482, 287907, 1284918, 555772, 3125553, 918425]);
   const [favoriteCitiesArray, setFavoriteCities] = useState([2618724, 2801268, 136022, 1988803]);
 
-  const [weatherData, setWeatherData] = useState();
+  const [weatherData, setWeatherData] = useState(null);
   const [favoritesWeatherData, setFavoritesWeatherData] = useState([]);
   const [cityImage, setCityImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [dots, setDots] = useState("");
-
-  useEffect(() => {
-    fetchCityWeather("current", previewCityArray[Math.floor(Math.random() * previewCityArray.length)]);
-
-    const interval = setInterval(() => {
-      setDots((prevDots) => {
-        if (prevDots.length < 3) {
-          return prevDots + ".";
-        } else {
-          return "";
-        }
-      });
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, [])
+  const currentDayIndex = new Date().getDay();
+  const upcomingDays = getUpcomingDays(currentDayIndex);
 
   useEffect(() => {
-    console.log("Searched City ID: ", searchedCityId);
+    const randomCityId = previewCityArray[Math.floor(Math.random() * previewCityArray.length)];
+    fetchCityWeather("current", randomCityId);
+    setSearchedCityId(randomCityId);
+
+    fetchWeatherForMany("current", favoriteCitiesArray);
+
+    setIsLoading(false);
+  }, []);
+
+  // Fetch data when searchedCityId changes
+  useEffect(() => {
     if (searchedCityId) {
       fetchCityWeather("current", searchedCityId);
     }
   }, [searchedCityId]);
 
+  // Fetch data when favoriteCitiesArray changes
   useEffect(() => {
-    console.log("Favorite Cities Array Changed", favoriteCitiesArray)
     fetchWeatherForMany("current", favoriteCitiesArray);
-  }, [favoriteCitiesArray])
+  }, [favoriteCitiesArray]);
 
+  // Fetch weather for a single city
   const fetchCityWeather = (method, cityId) => {
+    setIsLoading(true);
     fetch(`http://api.weatherapi.com/v1/${method}.json?key=${weatherApiKey}&q=id:${cityId}&aqi=no`)
       .then((response) => response.json())
       .then((data) => {
         setWeatherData(data);
         fetchCityImage(data.location);
       })
-      .catch(function (error) {
-        console.log("Error: ", error);
-      });
+      .catch((error) => console.log("Error: ", error))
+      .finally(() => setIsLoading(false));
   };
 
+  // Fetch weather for multiple cities
   const fetchWeatherForMany = (method, citiesArray) => {
-    const tempCitiesArray = [];
-  
-    const fetchWeather = (cityId) => {
-      return fetch(`http://api.weatherapi.com/v1/${method}.json?key=${weatherApiKey}&q=id:${cityId}&aqi=no`)
+    const fetchWeather = (cityId) =>
+      fetch(`http://api.weatherapi.com/v1/${method}.json?key=${weatherApiKey}&q=id:${cityId}&aqi=no`)
         .then((response) => response.json())
-        .then((data) => {
-          return data;
-        })
         .catch((error) => {
           console.log("Error: ", error);
           return null;
         });
-    };
-  
-    Promise.all(citiesArray.map(fetchWeather)).then((fetchedData) => {
-      const validData = fetchedData.filter((data) => data !== null);
-      tempCitiesArray.push(...validData);
-      console.log("Temp Cities Array", tempCitiesArray);
-      setFavoritesWeatherData(tempCitiesArray);
-    });
+
+    Promise.all(citiesArray.map(fetchWeather))
+      .then((fetchedData) => setFavoritesWeatherData(fetchedData.filter((data) => data)));
   };
 
+  // Fetch image for the city
   const fetchCityImage = (location) => {
     fetch(`https://api.unsplash.com/search/photos?query=${location.name} ${location.country}&client_id=${imageApiKey}&per_page=10`)
       .then((response) => response.json())
       .then((data) => {
         if (data.results && data.results.length > 0) {
-          const randomImageIndex = Math.floor(Math.random() * data.results.length);
-          setCityImage(data.results[randomImageIndex].urls.regular);
+          setCityImage(data.results[Math.floor(Math.random() * data.results.length)].urls.regular);
         } else {
           setCityImage(cloudsImage);
         }
       })
-      .catch((error) => {
-        console.log("Error fetching city image: ", error);
-        setCityImage(cloudsImage);
-      });
+      .catch(() => setCityImage(cloudsImage));
   };
 
   return (
     <div className="app-container" style={cityImage ? { '--background-url': `url(${cityImage})` } : {}}>
-      <SearchInput weatherApiKey={weatherApiKey} setCityId={setSearchedCityId} />  
-      {(weatherData && favoritesWeatherData.length == favoriteCitiesArray.length) ? (
-        <div className=''>
-          <WeatherInfo weatherData={weatherData} cityId={searchedCityId} favorites={favoriteCitiesArray} setFavorites={setFavoriteCities} />
-          <FavoriteBar weatherApiKey={weatherApiKey} weatherData={favoritesWeatherData} setCityId={setSearchedCityId} />
+      <SearchInput weatherApiKey={weatherApiKey} setCityId={setSearchedCityId} />
+      {isLoading || !weatherData ? (
+        <div>
+          <h1 className="fetchingDataText">Fetching Data...</h1>
         </div>
       ) : (
         <div>
-          <h1 className='fetchinDataText'>Fetching Data{dots}</h1>
+          <WeatherInfo
+            weatherData={weatherData}
+            cityId={searchedCityId}
+            favorites={favoriteCitiesArray}
+            setFavorites={setFavoriteCities}
+            followingDaysArray={upcomingDays}
+          />
+          <FavoriteBar
+            weatherApiKey={weatherApiKey}
+            weatherData={favoritesWeatherData}
+            setCityId={setSearchedCityId}
+          />
         </div>
       )}
+
     </div>
   );
 }

@@ -57,6 +57,7 @@
     margin-left: 10px;
     width: 30px;
     height: 30px;
+    background-color: grey;
 }
 
 .current-wind {
@@ -100,3 +101,67 @@
     font-size: 1rem;
     font-weight: 500;
 }
+
+.favorite-button {
+    position: absolute;
+    visibility: hidden;
+}
+
+.favorite-button-image {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    margin: 10px;
+    height: 30px;
+
+    transform: translate(50%, -50%);
+    transition-duration: 0.5s;
+}
+
+.favorite-button-image:hover {
+    height: 35px;
+}
+
+.days-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 5px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    overflow-x: auto;
+    gap: 5px;
+  }
+  
+  .day-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: balck;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  .forecast-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 80px;
+    height: 100px;
+    padding: 10px;
+    background-color: #ffffff; 
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  
+  .forecast-box:hover {
+    background-color: #e0f7ff;
+    transform: scale(1.05);
+  }
+  
