@@ -20,7 +20,7 @@ function FavoriteBar({ weatherApiKey, weatherData, setCityId }) {
 
     return (
         <div className="favorite-container">
-            {weatherData.length > 0 && (
+            {weatherData.length > 0 ? (
                 <div className="favorite-boxes">
                     {weatherData.map((city) => (
                         <div
@@ -37,6 +37,8 @@ function FavoriteBar({ weatherApiKey, weatherData, setCityId }) {
                         </div>
                     ))}
                 </div>
+            ) : (
+                <p className="no-favorites-message">You have no favorite cities added</p>
             )}
         </div>
     );

@@ -151,17 +151,13 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 80px;
+    min-width: 200px;
+    max-width: 1000px;
     height: 100px;
-    padding: 10px;
+    padding: 0px;
     background-color: #ffffff; 
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     transition: transform 0.2s, background-color 0.2s;
-  }
-  
-  .forecast-box:hover {
-    background-color: #e0f7ff;
-    transform: scale(1.05);
   }
   

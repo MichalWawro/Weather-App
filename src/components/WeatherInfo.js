@@ -5,7 +5,7 @@ import "./WeatherInfo.css";
 import favoriteIconFilled from "../resources/favorite-icon-empty.png";
 import favoriteIconEmpty from "../resources/favorite-icon-filled.png";
 
-function WeatherInfo({ weatherData, cityId, favorites, setFavorites, followingDaysArray }) {
+function WeatherInfo({ weatherData, forecastData, cityId, favorites, setFavorites, followingDaysArray }) {
     const [favorite, setFavorite] = useState(false);
 
     useEffect(() => {
@@ -19,8 +19,10 @@ function WeatherInfo({ weatherData, cityId, favorites, setFavorites, followingDa
 
         if (favorites.includes(cityId)) {
             setFavorites(favorites.filter((id) => id !== cityId));
-        } else {
+        } else if (favorites < 6) {
             setFavorites([...favorites, cityId]);
+        } else {
+            console.log("You can add up to 6 cities as favorites")
         }
     }
 
@@ -36,7 +38,7 @@ function WeatherInfo({ weatherData, cityId, favorites, setFavorites, followingDa
                 <input
                     className="favorite-button"
                     type="checkbox"
-                    onChange={() => {}}
+                    onChange={() => { }}
                     checked={favorite}
                     style={{ display: "none" }}
                 />
@@ -71,8 +73,8 @@ function WeatherInfo({ weatherData, cityId, favorites, setFavorites, followingDa
                     <div key={index} className="day-container">
                         <div className="day-name">{dayName}</div>
                         <div className="forecast-box">
-                            <img src={weatherData.current.condition.icon} alt="condition-image" />
-                            <h1>{weatherData.current.temp_c}°C, {weatherData.current.temp_f}°F</h1>
+                            <img src={forecastData.current.condition.icon} alt="condition-image" />
+                            <h1>{forecastData.forecast.forecastday[index].day.avgtemp_c}°C, {forecastData.forecast.forecastday[index].day.avgtemp_f}°F</h1>
                         </div>
                     </div>
                 ))}

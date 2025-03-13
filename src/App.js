@@ -9,19 +9,21 @@ import cloudsImage from './resources/clouds-image.jpg';
 
 function getUpcomingDays(currentDayIndex) {
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  return Array.from({ length: 4 }, (_, i) => days[(currentDayIndex + i) % 7]);
+  return Array.from({ length: 3 }, (_, i) => days[(currentDayIndex + i) % 7]);
 }
 
 function App() {
-  const [weatherApiKey] = useState('API_Key');
-  const [imageApiKey] = useState('API_Key');
+  const [weatherApiKey] = useState('Your weather API Key');
+  const [imageApiKey] = useState('Your image API Key');
 
   const [searchedCityId, setSearchedCityId] = useState(null);
   const [previewCityArray] = useState([2618724, 2801268, 136022, 1988803, 803267, 714482, 287907, 1284918, 555772, 3125553, 918425]);
-  const [favoriteCitiesArray, setFavoriteCities] = useState([2618724, 2801268, 136022, 1988803]);
+  const [favoriteCitiesArray, setFavoriteCities] = useState([]);
 
   const [weatherData, setWeatherData] = useState(null);
+  const [forecastData, setForecastData] = useState(null);
   const [favoritesWeatherData, setFavoritesWeatherData] = useState([]);
+
   const [cityImage, setCityImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,6 +33,7 @@ function App() {
   useEffect(() => {
     const randomCityId = previewCityArray[Math.floor(Math.random() * previewCityArray.length)];
     fetchCityWeather("current", randomCityId);
+    fetchCityWeather("forecast", randomCityId);
     setSearchedCityId(randomCityId);
 
     fetchWeatherForMany("current", favoriteCitiesArray);
@@ -42,6 +45,7 @@ function App() {
   useEffect(() => {
     if (searchedCityId) {
       fetchCityWeather("current", searchedCityId);
+      fetchCityForecast("forecast", searchedCityId);
     }
   }, [searchedCityId]);
 
@@ -52,15 +56,23 @@ function App() {
 
   // Fetch weather for a single city
   const fetchCityWeather = (method, cityId) => {
-    setIsLoading(true);
     fetch(`http://api.weatherapi.com/v1/${method}.json?key=${weatherApiKey}&q=id:${cityId}&aqi=no`)
       .then((response) => response.json())
       .then((data) => {
-        setWeatherData(data);
-        fetchCityImage(data.location);
+          setWeatherData(data)
+          fetchCityImage(data.location)
       })
       .catch((error) => console.log("Error: ", error))
-      .finally(() => setIsLoading(false));
+  };
+
+  //Fetch forecast for a city
+  const fetchCityForecast = (method, cityId) => {
+    fetch(`http://api.weatherapi.com/v1/${method}.json?key=${weatherApiKey}&q=id:${cityId}&days=3&aqi=no`)
+      .then((response) => response.json())
+      .then((data) => {
+          setForecastData(data);
+      })
+      .catch((error) => console.log("Error: ", error))
   };
 
   // Fetch weather for multiple cities
@@ -94,7 +106,7 @@ function App() {
   return (
     <div className="app-container" style={cityImage ? { '--background-url': `url(${cityImage})` } : {}}>
       <SearchInput weatherApiKey={weatherApiKey} setCityId={setSearchedCityId} />
-      {isLoading || !weatherData ? (
+      {isLoading || !weatherData || !forecastData ? (
         <div>
           <h1 className="fetchingDataText">Fetching Data...</h1>
         </div>
@@ -102,6 +114,7 @@ function App() {
         <div>
           <WeatherInfo
             weatherData={weatherData}
+            forecastData={forecastData}
             cityId={searchedCityId}
             favorites={favoriteCitiesArray}
             setFavorites={setFavoriteCities}
