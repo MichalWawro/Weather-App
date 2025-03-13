@@ -11,8 +11,8 @@ A simple weather web application
 ## Application Setup:
 
 1. API Key Configuration:   
-Replace Weather_API_Key with your ..... API Key;
-Replace Background_API_Key with your ..... API Key;
+Replace Weather_API_Key with your Weather API Key (https://www.weatherapi.com/) ;
+Replace Background_API_Key with your Unsplash API Key (https://unsplash.com/);
 
 2. Running the Application
 To start the application navigate to the /weather-app folder and run the following command:
