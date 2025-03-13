@@ -19,7 +19,7 @@ function WeatherInfo({ weatherData, forecastData, cityId, favorites, setFavorite
 
         if (favorites.includes(cityId)) {
             setFavorites(favorites.filter((id) => id !== cityId));
-        } else if (favorites < 6) {
+        } else if (favorites.length < 6) {
             setFavorites([...favorites, cityId]);
         } else {
             console.log("You can add up to 6 cities as favorites")
