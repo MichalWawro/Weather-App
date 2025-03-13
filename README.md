@@ -11,15 +11,17 @@ A simple weather web application
 ## Application Setup:
 
 1. API Key Configuration:   
-Replace Weather_API_Key with your Weather API Key (https://www.weatherapi.com/) ;
-Replace Background_API_Key with your Unsplash API Key (https://unsplash.com/);
 
-2. Running the Application
+   Replace Weather_API_Key with your Weather API Key (https://www.weatherapi.com/);
+
+   Replace Background_API_Key with your Unsplash API Key (https://unsplash.com/);
+
+3. Running the Application
 To start the application navigate to the /weather-app folder and run the following command:
-
+                  
       npm run start
 
-3. How to use:
+5. How to use:
 - Use the search input field to search for a desired city or select one of the cities from the favorite bar at the bottom of the website;
 - Click the star to add/remove currently viewed city from the favorites;
 
